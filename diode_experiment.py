@@ -2,6 +2,7 @@ import pyvisa
 import time 
 import numpy as np
 from matplotlib import pyplot as plt
+import csv
 
 rm = pyvisa.ResourceManager("@py")
 ports = rm.list_resources()
@@ -67,11 +68,19 @@ def Middelen(n):
     print(meting_voltage_array)
     print(average_current)
     print(average_volt)
+    return(average_volt, average_current, STD_Volt, STD_Current)
 
-    plt.errorbar(average_volt, average_current, xerr = STD_Volt, yerr= STD_Current, fmt = '.')
-    plt.show()
+[Gem_volt, Gem_stroom, Std_volt, Std_stroom] =Middelen(5) 
+#plt.errorbar(Gem_volt, Gem_stroom, xerr = Std_volt, yerr= Std_stroom, fmt = '.')
+#plt.show()
 
-Middelen(10)
+
+with open("measurements.csv", "w", newline="") as csvfile:
+    writer = csv.writer(csvfile)
+    writer.writerow(["U", "I","STD(U)", "STD(I)"])
+    for a, b, c, d in zip(Gem_volt, Gem_stroom, Std_volt, Std_stroom):
+        writer.writerow([a, b, c, d])
+
 
 
 
