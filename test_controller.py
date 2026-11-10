@@ -5,7 +5,6 @@ import pyvisa
 def list_resources():
     rm = pyvisa.ResourceManager("@py")
     ports = rm.list_resources()
-    print(ports)
     return ports
 
 
