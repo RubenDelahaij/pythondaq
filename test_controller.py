@@ -29,34 +29,35 @@ class ArduinoVISADevice:
         self.device.query(f"OUT:CH0 {value}")
         self.output_value = value
 
-    def set_output(self):
-        self.device.query(f"")
+    def set_output_voltage(self, value):
+        response = self.device.query(f"OUT:CH0 {round((value * 1023) / 3.3)}")
+        return response
 
     def get_output_value(self):
         real_output_value = self.device.query("OUT:CH0?")
-        print(f"real output value: {real_output_value}")
         return real_output_value
 
     def get_input_value(self, port):
-        input = self.device.query(f"OUT:CH{port}?")
-        print(f"Measured input value: {input}")
+        input = self.device.query(f"MEAS:CH{port}?")
         return input
 
     def get_input_voltage(self, port):
-        input = self.device.query(f"OUT:CH{port}?")
-        print(f"ff testen hoor {input}")
+        input = self.device.query(f"MEAS:CH{port}?")
         input_v = (float(input) / 1023) * 3.3
-        print(f"Input voltage van port {port}: {input_v}")
         return input_v
 
 
 arduino = ArduinoVISADevice("ASRL8")
 arduino.get_identification()
 
-arduino.set_output_value(1000)
-time.sleep(0.5)
-arduino.get_input_value(1)
-arduino.get_input_voltage(1)
-time.sleep(0.5)
-arduino.get_input_value(1)
-arduino.get_input_voltage(1)
+arduino.set_output_value(800)
+time.sleep(1)
+print(arduino.get_output_value())
+print(arduino.get_input_value(0))
+print(arduino.get_input_voltage(0))
+print("EN door!")
+arduino.set_output_voltage(2)
+print(arduino.get_output_value())
+print(arduino.get_input_value(0))
+print(arduino.get_input_voltage(0))
+time.sleep(1)

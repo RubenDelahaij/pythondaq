@@ -3,40 +3,40 @@ import time
 import numpy as np
 from matplotlib import pyplot as plt
 import csv
+from test_controller import ArduinoVISADevice 
 
 rm = pyvisa.ResourceManager("@py")
-ports = rm.list_resources()
-print(ports)
 
-device = rm.open_resource(
-    "ASRL8::INSTR", read_termination="\r\n", write_termination="\n"
-)
-identification = device.query("*IDN?")
-print(identification)
-device.query(f"OUT:CH0 0")
-def measure_1():
-    return(float(device.query(f"MEAS:CH1?")))
-def measure_2():
-    return(float(device.query(f"MEAS:CH2?")))
-def DAC(i):
-    return((float(i) / 1023)*3.3)
-def ADC(i):
-    return((float(i)/3.3)*1023)
+#List resources
+def list_resources():
+    ports = rm.list_resources()
+    print(ports)
+    return ports
+print(list_resources())
 
-# for i in range(1000):
-#     device.query(f"OUT:CH0 {i}")
-#     print(measure_1())
-#     print(measure_2())
+#maak instance voor de ardiuno
+arduino = ArduinoVISADevice("ASRL8")
+arduino.set_output_value(0)
 
-def measure_lampje():
+
+
+# def measure_1():
+#     return(float(device.query(f"MEAS:CH1?")))
+# def measure_2():
+#     return(float(device.query(f"MEAS:CH2?")))
+# def DAC(i):
+#     return((float(i) / 1023)*3.3)
+# def ADC(i):
+#     return((float(i)/3.3)*1023)
+
+
+def meetreeks():
     U1 = []
     U2 = []
     U_lamp = []
-    I = []
     for i in np.arange(0, 1023):
         device.query(f"OUT:CH0 {i}")
-        #print(f"Lampje(ruw): {measure_1()} \n Lampje(V): {DAC(measure_1()):.2f} \n Weerstand(ruw): {measure_2()} \n Weerstand(V): {DAC(measure_2()):.2f} ")
-        U1.append(measure_1())
+        U1.append(arduino.)
         U2.append(measure_2())
         U_lamp.append(DAC(measure_1()- measure_2()))
         I.append(float(DAC(measure_2())) / 220)
