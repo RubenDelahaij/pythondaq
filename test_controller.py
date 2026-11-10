@@ -1,24 +1,26 @@
 import pyvisa
-import time
 
 
-rm = pyvisa.ResourceManager("@py")
-
-
-def list_rescources():
+# List resources
+def list_resources():
+    rm = pyvisa.ResourceManager("@py")
     ports = rm.list_resources()
     print(ports)
     return ports
 
 
-list_rescources()
+# print(list_resources)
+
+
+# list_rescources()
 
 
 class ArduinoVISADevice:
     def __init__(self, resource):
+        rm = pyvisa.ResourceManager("@py")
         self.channel = resource
         self.device = rm.open_resource(
-            f"{resource}::INSTR", read_termination="\r\n", write_termination="\n"
+            resource, read_termination="\r\n", write_termination="\n"
         )
 
     def get_identification(self):
@@ -47,17 +49,17 @@ class ArduinoVISADevice:
         return input_v
 
 
-arduino = ArduinoVISADevice("ASRL8")
-arduino.get_identification()
+# arduino = ArduinoVISADevice("ASRL8")
+# arduino.get_identification()
 
-arduino.set_output_value(800)
-time.sleep(1)
-print(arduino.get_output_value())
-print(arduino.get_input_value(0))
-print(arduino.get_input_voltage(0))
-print("EN door!")
-arduino.set_output_voltage(2)
-print(arduino.get_output_value())
-print(arduino.get_input_value(0))
-print(arduino.get_input_voltage(0))
-time.sleep(1)
+# arduino.set_output_value(800)
+# time.sleep(1)
+# print(arduino.get_output_value())
+# print(arduino.get_input_value(0))
+# print(arduino.get_input_voltage(0))
+# print("EN door!")
+# arduino.set_output_voltage(2)
+# print(arduino.get_output_value())
+# print(arduino.get_input_value(0))
+# print(arduino.get_input_voltage(0))
+# time.sleep(1)
