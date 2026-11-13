@@ -51,9 +51,23 @@ class run_experiment:
                 writer.writerow([a, b, c, d])
 
 
-experiment = run_experiment("ASRL8::INSTR")
-print(experiment.measure(2))
-experiment.drawdata()
-experiment.getcsv("tatsa")
+def MeasureLED(n, safe, name):
+    """Measure the led
+
+    Args:
+        n (interger): number of measurements to average
+        safe (string): safe data (Y/N)
+        name (string): name of safe file
+    """
+    experiment = run_experiment("ASRL8::INSTR")
+    print(experiment.measure(n))
+    experiment.drawdata()
+    if safe == "Y":
+        experiment.getcsv(name)
+
+
+def mainy():
+    MeasureLED(2, "N", "EenTweeIkDoeNietMeerMee")
+
 
 print("Programma is klaar!")
