@@ -1,6 +1,6 @@
 import time
 import numpy as np
-from test_controller import ArduinoVISADevice, list_resources
+from test_controller import ArduinoVISADevice
 
 
 # Make instance for the arduino
@@ -12,11 +12,22 @@ from test_controller import ArduinoVISADevice, list_resources
 # Make function to do a full measurement and return as lists.
 class DiodeExperiment:
     def __init__(self, port):
+        """Create experiment
+
+        Args:
+            port (string): Name of port ("ASRL{n}::INSTR")
+        """
         self.arduino = ArduinoVISADevice(port)
         self.arduino.set_output_value(0)
+        self.arduino.get_identification()
 
     # this function does one measurement over the range of voltages
     def measurements(self):
+        """Make a measurent over the entire range of the LED
+
+        Returns:
+            _type_: list
+        """
         # U1 = []
         # U2 = []
         I = []
@@ -38,6 +49,14 @@ class DiodeExperiment:
 
     # Do several measurements and average them for each output. Also return the STD to be able to account for error margins
     def averageddata(self, n):
+        """Create a set of averaged data
+
+        Args:
+            iterations (interger): number of datasets used in the average
+
+        Returns:
+            _type_: list
+        """
         print("Averaging")
         metingen_voltage = []
         metingen_stroom = []
@@ -56,4 +75,4 @@ class DiodeExperiment:
         STD_Volt = np.std(metingen_voltage, axis=0)
         STD_Current = np.std(metingen_stroom, axis=0)
         self.averageddataset = [averaged_volt, averaged_current, STD_Volt, STD_Current]
-        return (averaged_volt, averaged_current, STD_Volt, STD_Current)
+        return self.averageddataset
