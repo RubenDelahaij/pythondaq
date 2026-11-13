@@ -1,6 +1,6 @@
 import time
 import numpy as np
-from test_controller import ArduinoVISADevice
+from pythondaq.arduino_device import ArduinoVISADevice
 
 
 # Make instance for the arduino

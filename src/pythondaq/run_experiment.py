@@ -1,7 +1,7 @@
-from diode_experiment import DiodeExperiment
+from pythondaq.diode_experiment import DiodeExperiment
 from matplotlib import pyplot as plt
 import csv
-from test_controller import list_resources
+from pythondaq.arduino_device import list_resources
 
 print(list_resources())
 
