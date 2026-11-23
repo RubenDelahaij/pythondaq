@@ -30,7 +30,7 @@ class ArduinoVISADevice:
     def get_identification(self):
         """Request identification of the device"""
         identification = self.device.query("*IDN?")
-        print(f"Identification: \n {identification}")
+        return identification
 
     def set_output_value(self, value):
         """Set the output value of the device

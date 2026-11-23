@@ -1,6 +1,6 @@
 import time
 import numpy as np
-from pythondaq.arduino_device import ArduinoVISADevice
+from pythondaq.arduino_device import ArduinoVISADevice, list_resources
 
 
 # Make instance for the arduino
@@ -21,8 +21,11 @@ class DiodeExperiment:
         self.arduino.set_output_value(0)
         self.arduino.get_identification()
 
+    def List_resources(self):
+        list_resources()
+
     # this function does one measurement over the range of voltages
-    def measurements(self):
+    def measurements(self, stepsize, start, end):
         """Make a measurent over the entire range of the LED
 
         Returns:
@@ -30,10 +33,10 @@ class DiodeExperiment:
         """
         # U1 = []
         # U2 = []
-        I = []
         U_lamp = []
-        for i in np.arange(0, 1023):
-            self.arduino.set_output_value(i)
+        I = []
+        for i in np.arange(start, end, stepsize):
+            self.arduino.set_output_voltage(i)
 
             u1 = self.arduino.get_input_voltage(1)
             u2 = self.arduino.get_input_voltage(2)
@@ -43,26 +46,32 @@ class DiodeExperiment:
             U_lamp.append(u1 - u2)
             I.append(u2 / 220)
             time.sleep(0.001)
+            if i > 3.3:
+                print("STOPDITGAATTEVER")
+                break
         self.data = [U_lamp, I]
         self.arduino.set_output_value(0)
         return self.data
 
     # Do several measurements and average them for each output. Also return the STD to be able to account for error margins
-    def averageddata(self, n):
+    def averageddata(self, n, stepsize, start, end):
         """Create a set of averaged data
 
         Args:
             iterations (interger): number of datasets used in the average
-
+            stepsize (float): size of one step the programm takes during measurements [V]
+            start (float): the starting value for the measurement [V]
+            end (float): the final value for the measurement [V]
         Returns:
             _type_: list
         """
+
         print("Averaging")
         metingen_voltage = []
         metingen_stroom = []
 
         for i in range(n):
-            data = self.measurements()
+            data = self.measurements(stepsize, start, end)
             metingen_voltage.append(data[0])
             metingen_stroom.append(data[1])
             print(i)
@@ -76,3 +85,12 @@ class DiodeExperiment:
         STD_Current = np.std(metingen_stroom, axis=0)
         self.averageddataset = [averaged_volt, averaged_current, STD_Volt, STD_Current]
         return self.averageddataset
+
+
+def listresource():
+    return list_resources()
+
+
+def inforomation(port):
+    tempdevice = ArduinoVISADevice(port)
+    return tempdevice.get_identification()

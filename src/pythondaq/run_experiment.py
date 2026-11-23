@@ -14,11 +14,11 @@ class run_experiment:
         """start experiment
 
         Args:
-            name (string): ("ASRL{10}::INSTR")
+            name (string): ("ASRL{n}::INSTR")
         """
         self.experiment = DiodeExperiment(name)
 
-    def measure(self, it):
+    def measure(self, it, stepsize, start, end):
         """make measurements
 
         Args:
@@ -27,7 +27,7 @@ class run_experiment:
         Returns:
             _type_: (list); new averaged data set
         """
-        self.data = self.experiment.averageddata(it)
+        self.data = self.experiment.averageddata(it, stepsize, start, end)
         return self.data
 
     def drawdata(self):
@@ -70,4 +70,9 @@ def mainy():
     MeasureLED(2, "N", "EenTweeIkDoeNietMeerMee")
 
 
+print("HIERO JA HIERO")
+Arduino = run_experiment("ASRL11::INSTR")
+Arduino.measure(3, 0.01, 0, 3.3)
+print("EN NU DAN PANNENKOEK?")
+Arduino.drawdata()
 print("Programma is klaar!")
