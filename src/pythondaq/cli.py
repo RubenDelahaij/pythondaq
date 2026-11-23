@@ -22,6 +22,7 @@ def list():
     help="The name of the resource the user wants measured, in the string : {ASRL{n}::INSTR}",
 )
 @click.option(
+    "-min",
     "--min",
     help="The value from which the programm starts the measurement [V]",
     default=0.0,
@@ -29,6 +30,7 @@ def list():
     show_default=True,
 )
 @click.option(
+    "-max",
     "--max",
     help="The value at which the programm stops the measurement [V] ",
     default=3.3,
